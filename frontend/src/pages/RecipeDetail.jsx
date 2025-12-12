@@ -1,4 +1,4 @@
-// src/pages/RecipeDetail.jsx
+
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { API_URL } from "../config.js";
@@ -10,7 +10,7 @@ export default function RecipeDetail() {
   const [displayServings, setDisplayServings] = useState(null);
   const [error, setError] = useState(null);
 
-  // Chargement de la recette
+  
   useEffect(() => {
     fetch(`${API_URL}/recipes/${id}`)
       .then((res) => {
@@ -27,7 +27,7 @@ export default function RecipeDetail() {
       });
   }, [id]);
 
-  // Chargement des ingrédients de la recette
+  
   useEffect(() => {
     fetch(`${API_URL}/recipes/${id}/ingredients`)
       .then((res) => {
@@ -35,12 +35,12 @@ export default function RecipeDetail() {
         return res.json();
       })
       .then((data) => {
-        // L’API renvoie { member: [...] }
+        
         setIngredients(data.member || []);
       })
       .catch((err) => {
         console.error(err);
-        // On n’affiche pas d’erreur bloquante, juste une liste vide
+        
         setIngredients([]);
       });
   }, [id]);
@@ -68,17 +68,17 @@ export default function RecipeDetail() {
 
   const baseServings = recipe.servings || 1;
 
-  // Recalcule une quantité en fonction du nombre de portions choisi
+  
   const getScaledQuantity = (quantity) => {
     if (!quantity) return "";
     const q = parseFloat(quantity);
     if (isNaN(q)) {
-      // Si ce n’est pas un nombre (ex: "une pincée"), on laisse tel quel
+      
       return quantity;
     }
     const factor = displayServings / baseServings;
     const result = q * factor;
-    // On arrondit à 2 décimales max
+    
     return result % 1 === 0 ? result.toString() : result.toFixed(2);
   };
 

@@ -1,0 +1,123 @@
+:root{
+  --bg:#f7f7fb;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --shadow: 0 10px 25px rgba(0,0,0,.06);
+  --blue:#2563eb;
+  --cyan:#0ea5e9;
+  --red:#ef4444;
+}
+
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+.page{
+  max-width: 980px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.page-header{
+  margin-bottom: 18px;
+}
+.page-title{
+  margin:0;
+  font-size: 34px;
+  font-weight: 800;
+}
+.page-subtitle{
+  margin:6px 0 0;
+  color:var(--muted);
+}
+
+.recipe-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.recipe-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.recipe-title{
+  margin:0 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+}
+.recipe-category{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size: 14px;
+}
+
+.actions{
+  display:flex;
+  gap: 10px;
+  flex-wrap:wrap;
+}
+
+.btn-view, .btn-edit, .btn-delete, .pager-btn{
+  border:0;
+  cursor:pointer;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.btn-view{ background: var(--blue); color:white; }
+.btn-edit{ background: var(--cyan); color:white; }
+.btn-delete{ background: var(--red); color:white; }
+
+.btn-view:hover, .btn-edit:hover, .btn-delete:hover{
+  filter: brightness(.95);
+}
+
+.pagination{
+  margin-top: 18px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap: 12px;
+}
+
+.pager-btn{
+  background:white;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.pager-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.pager-info{
+  color:var(--muted);
+  font-weight:600;
+}
+
+/* responsive */
+@media (max-width: 900px){
+  .recipe-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px){
+  .recipe-grid{ grid-template-columns: 1fr; }
+}

@@ -1,25 +1,34 @@
-import { Routes, Route, Link } from "react-router-dom";
-import RecipeList from "./pages/RecipeList.jsx";
-import RecipeDetail from "./pages/RecipeDetail.jsx";
-import AddRecipe from "./pages/AddRecipe.jsx";
+import { Link, Routes, Route } from "react-router-dom";
+import RecipeList from "./pages/RecipeList";
+import AddRecipe from "./pages/AddRecipe";
+import RecipeDetail from "./pages/RecipeDetail";
+import "./styles.css";
+import EditRecipe from "./pages/EditRecipe.jsx";
+
 
 export default function App() {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Recettes</h1>
+    <>
+      <header>
+  <h1>Recettes</h1>
+  <nav>
+    <Link to="/">Liste</Link>
+    <Link to="/add">Ajouter</Link>
+  </nav>
+</header>
+      <main className="container">
+        <Routes>
+          <Route path="/" element={<RecipeList />} />
+          <Route path="/add" element={<AddRecipe />} />
+          <Route path="/recipes/:id" element={<RecipeDetail />} />
+          <Route path="/recipes/:id/edit" element={<EditRecipe />} />
 
-      <nav>
-        <Link to="/">Accueil</Link>{" | "}
-        <Link to="/add">Ajouter une recette</Link>
-      </nav>
+        </Routes>
+      </main>
 
-      <h2>Liste des recettes</h2>
-
-      <Routes>
-        <Route path="/" element={<RecipeList />} />
-        <Route path="/recipes/:id" element={<RecipeDetail />} />
-        <Route path="/add" element={<AddRecipe />} />
-      </Routes>
-    </div>
+      <footer>
+        Projet React – Gestion des recettes
+      </footer>
+    </>
   );
 }

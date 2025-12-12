@@ -1,4 +1,4 @@
-// src/pages/RecipeList.jsx
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../config.js";
@@ -13,11 +13,15 @@ export default function RecipeList() {
   useEffect(() => {
     fetch(`${API_URL}/recipes`)
       .then((res) => {
-        if (!res.ok) throw new Error("Erreur HTTP " + res.status);
+        if (!res.ok) {
+          throw new Error("Erreur HTTP " + res.status);
+        }
         return res.json();
       })
       .then((data) => {
-        setRecipes(data.member || []);
+        
+        const items = data["hydra:member"] || data.member || [];
+        setRecipes(items);
       })
       .catch((err) => {
         console.error(err);
@@ -25,25 +29,39 @@ export default function RecipeList() {
       });
   }, []);
 
+  
+  const handleDelete = async (id) => {
+    const ok = window.confirm("Tu veux vraiment supprimer cette recette ?");
+    if (!ok) return;
+
+    try {
+      const res = await fetch(`${API_URL}/recipes/${id}`, { method: "DELETE" });
+
+     
+      if (!res.ok && res.status !== 204) {
+        throw new Error("Erreur suppression: " + res.status);
+      }
+
+      
+      setRecipes((prev) => prev.filter((r) => r.id !== id));
+    } catch (e) {
+      console.error(e);
+      alert("Suppression impossible. Vérifie le backend/console.");
+    }
+  };
+
   if (error) {
     return (
       <div>
-        <h1>Recettes</h1>
-        <nav>
-          <Link to="/">Accueil</Link> | <Link to="/add">Ajouter une recette</Link>
-        </nav>
+        <h2>Liste des recettes</h2>
         <p style={{ color: "red" }}>{error}</p>
       </div>
     );
   }
 
-  // Pagination côté client
   const totalPages = Math.max(1, Math.ceil(recipes.length / ITEMS_PER_PAGE));
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
-  const visibleRecipes = recipes.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE
-  );
+  const visibleRecipes = recipes.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const goToPage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -53,31 +71,50 @@ export default function RecipeList() {
 
   return (
     <div>
-      <h1>Recettes</h1>
-
-      <nav>
-        <Link to="/">Accueil</Link> | <Link to="/add">Ajouter une recette</Link>
-      </nav>
-
       <h2>Liste des recettes</h2>
 
+      {recipes.length === 0 && <p>Aucune recette pour l’instant.</p>}
+
       <ul>
-        {visibleRecipes.map((r) => (
-          <li key={r.id}>
-            <Link to={`/recipes/${r.id}`}>{r.title}</Link>
-          </li>
-        ))}
+        <div className="recipe-grid">
+          {visibleRecipes.map((r) => (
+            <article className="recipe-card" key={r.id}>
+              <h3>{r.title}</h3>
+
+              <div className="actions">
+                {}
+                <button className="btn-view" type="button">
+                  Voir
+                </button>
+
+                <button className="btn-edit" type="button">
+                  Modifier
+                </button>
+
+                {}
+                <button
+                  className="btn-delete"
+                  type="button"
+                  onClick={() => handleDelete(r.id)}
+                >
+                  Supprimer
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
       </ul>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div style={{ marginTop: "15px" }}>
           <button onClick={() => goToPage(page - 1)} disabled={page === 1}>
             Précédent
           </button>
+
           <span style={{ margin: "0 10px" }}>
             Page {page} / {totalPages}
           </span>
+
           <button
             onClick={() => goToPage(page + 1)}
             disabled={page === totalPages}
