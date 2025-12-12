@@ -13,21 +13,18 @@ final class RecipeProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-       
+        
         if ($operation instanceof DeleteOperationInterface) {
             if (is_object($data)) {
                 $this->em->remove($data);
                 $this->em->flush();
             }
+
+            
             return null;
         }
 
         
-        if (is_object($data)) {
-            $this->em->persist($data);
-            $this->em->flush();
-        }
-
         return $data;
     }
 }
