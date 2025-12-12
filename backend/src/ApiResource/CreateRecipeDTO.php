@@ -1,32 +1,23 @@
 <?php
+
 namespace App\ApiResource;
 
-use App\Entity\Recipe;
-use App\Mapper\DtoCollection;
-use Symfony\Component\ObjectMapper\Attribute\Map;
+use Symfony\Component\Validator\Constraints as Assert;
 
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Positive;
+final class CreateRecipeDTO
+{
+    #[Assert\NotBlank]
+    public ?string $title = null;
 
-#[Map(target: Recipe::class)]
-class CreateRecipeDTO {
-    
-    #[NotBlank]
-    public string $title;
-    #[NotBlank]
-    public string $category;
-    #[NotBlank]
-    public string $steps;
+    #[Assert\NotBlank]
+    public ?string $category = null;
+
+    #[Assert\NotBlank]
+    public ?string $steps = null;
+
+    #[Assert\NotNull]
+    #[Assert\Positive]
+    public ?int $servings = null;
+
     public ?string $picture = null;
-
-    #[NotBlank]
-    #[Positive]
-    public int $servings;
-    
-    
-    #[Map(transform:DtoCollection::class)]
-    /**
-     * @var IngredientDTO[]
-     */
-    public array $ingredients = [];
 }
