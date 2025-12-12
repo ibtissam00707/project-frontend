@@ -10,45 +10,49 @@ export default function RecipeList() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    fetch(`${API_URL}/recipes`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Erreur HTTP " + res.status);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        
-        const items = data["hydra:member"] || data.member || [];
-        setRecipes(items);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Impossible de charger les recettes.");
-      });
-  }, []);
+ useEffect(() => {
+  fetch(`${API_URL}/api/recipes`)
+    .then((res) => {
+  if (!res.ok) {
+    throw new Error("Erreur HTTP " + res.status);
+  }
+  return res.json();
+})
+
+    .then((data) => {
+      const items = data["hydra:member"] ?? data.member ?? [];
+      setRecipes(items);
+      setError(null);
+    })
+    .catch((err) => {
+      console.error(err);
+      setError("Impossible de charger les recettes.");
+    });
+}, []);
 
   
-  const handleDelete = async (id) => {
-    const ok = window.confirm("Tu veux vraiment supprimer cette recette ?");
-    if (!ok) return;
+ const handleDelete = async (id) => {
+  const ok = window.confirm("Tu veux vraiment supprimer cette recette ?");
+  if (!ok) return;
 
-    try {
-      const res = await fetch(`${API_URL}/recipes/${id}`, { method: "DELETE" });
+  try {
+    const res = await fetch(`${API_URL}/api/recipes/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-     
-      if (!res.ok && res.status !== 204) {
-        throw new Error("Erreur suppression: " + res.status);
-      }
-
-      
-      setRecipes((prev) => prev.filter((r) => r.id !== id));
-    } catch (e) {
-      console.error(e);
-      alert("Suppression impossible. Vérifie le backend/console.");
+    if (!res.ok && res.status !== 204) {
+      throw new Error("Erreur suppression: " + res.status);
     }
-  };
+
+    setRecipes((prev) => prev.filter((r) => r.id !== id));
+  } catch (e) {
+    console.error(e);
+    alert("Suppression impossible. Vérifie le backend / console.");
+  }
+};
 
   if (error) {
     return (

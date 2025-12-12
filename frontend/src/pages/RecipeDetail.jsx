@@ -12,7 +12,9 @@ export default function RecipeDetail() {
 
   
   useEffect(() => {
-    fetch(`${API_URL}/recipes/${id}`)
+    fetch(`${API_URL}/api/recipes`)
+
+  
       .then((res) => {
         if (!res.ok) throw new Error("Erreur lors du chargement de la recette");
         return res.json();
@@ -29,7 +31,8 @@ export default function RecipeDetail() {
 
   
   useEffect(() => {
-    fetch(`${API_URL}/recipes/${id}/ingredients`)
+    fetch(`${API_URL}/api/recipes/${id}`)
+
       .then((res) => {
         if (!res.ok) throw new Error("Erreur lors du chargement des ingrédients");
         return res.json();

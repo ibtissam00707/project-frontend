@@ -13,7 +13,8 @@ export default function EditRecipe() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/recipes/${id}`)
+    fetch(`${API_URL}/api/recipes`)
+
       .then((res) => {
         if (!res.ok) throw new Error("Erreur chargement recette");
         return res.json();
@@ -35,7 +36,7 @@ export default function EditRecipe() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/recipes/${id}`, {
+      const res = await fetch(`${API_URL}/api/recipes/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/merge-patch+json",

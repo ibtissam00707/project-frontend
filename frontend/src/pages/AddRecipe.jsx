@@ -43,13 +43,15 @@ export default function AddRecipe() {
 
     try {
       
-      const recipeRes = await fetch(`${API_URL}/recipes`, {
+      const recipeRes = awaitfetch(`${API_URL}/api/recipes`
+, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
+        
           title,
           category,
           steps,
@@ -85,7 +87,8 @@ export default function AddRecipe() {
       if (ingredientsToSend.length > 0) {
         const promises = ingredientsToSend.map(async (ing) => {
           const res = await fetch(
-            `${API_URL}/recipes/${recipeId}/ingredients`,
+            `${API_URL}/api/recipes/${recipeId}/ingredients`
+,
             {
               method: "POST",
               headers: {
